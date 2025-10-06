@@ -1,7 +1,7 @@
 ## Flow of solution
 <img width="1549" height="862" alt="image" src="https://github.com/user-attachments/assets/6e1e0b9c-e3cc-4f45-85f6-c7187fb7bb44" />
 
------
+
 
 ### Manual Calculation
 
@@ -20,7 +20,7 @@ To understand what the tools are doing, you can also calculate the metrics manua
 * **How to calculate:** Simply **count the number of classes** that directly inherit from the class in question. A high NOC can indicate a well-reused abstraction, but it can also mean that an abstraction is being misused.
 
 #### 4. Coupling Between Object classes (CBO)
-* [cite_start]**What it measures:** The degree of coupling a class has with other classes[cite: 19].
+* **What it measures:** The degree of coupling a class has with other classes.
 * **How to calculate:** It's a **count of the other classes** to which a class is coupled. A class is coupled to another if it uses the methods or instance variables of that other class. High coupling is undesirable as it complicates modification and testing.
 
 #### 5. Response For a Class (RFC)
@@ -28,11 +28,27 @@ To understand what the tools are doing, you can also calculate the metrics manua
 * **How to calculate:** It's the **number of methods in the class** plus the **number of remote methods** directly called by the methods of that class. A high RFC suggests high complexity and can make a class difficult to test.
 
 #### 6. Lack of Cohesion in Methods (LCOM)
-* [cite_start]**What it measures:** The degree to which methods within a class are related to each other[cite: 19].
+* **What it measures:** The degree to which methods within a class are related to each other.
 * **How to calculate:** This is the most complex metric with several variations. The original idea is to look at pairs of methods in a class. If two methods use at least one common instance variable, they are considered cohesive. LCOM is a count of the pairs of methods that are **not cohesive** minus the pairs that are. A high LCOM value indicates the class is trying to do too many different things and should probably be split.
+
+### General Thresholds for CK Metrics
+
+Here are some commonly cited upper-bound thresholds. If a class exceeds these values, it's a "red flag" that warrants an investigation.
+
+| Metric | Threshold (Upper Bound) | What it Might Indicate if Exceeded |
+| :--- | :--- | :--- |
+| **WMC** | > 20 | The class is too complex and may have too many responsibilities (violates SRP). |
+| **DIT** | > 5 | The inheritance hierarchy is getting too deep, which can make it hard to understand and maintain. |
+| **NOC** | > 7 | The base class is becoming fragile. A change to it could impact a large number of subclasses. |
+| **CBO** | > 14 | The class is highly coupled to other classes, making it difficult to change or reuse independently. |
+| **RFC** | > 50 | The class has a complex interaction with other parts of the system, making it difficult to test and debug. |
+| **LCOM** | > 1 (for LCOM4) or Low Cohesion | The class lacks a clear, single purpose and should likely be split into smaller, more cohesive classes. |
+
+
 ### Bad Code Example (High Metrics)
 
 This code features a `MegaManager` class that handles users, products, and notifications, leading to low cohesion and high complexity. It also has a very deep inheritance chain for `Level5Manager`.
+
 
 ```cpp
 // ---- (Other classes this manager is coupled to) ----
